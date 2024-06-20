@@ -28,11 +28,14 @@ port.pipe(parser);
 // serial capture setup
 const io = new Server(server);
 
-// import index.html and setup to serve at root of web server
+// setup index.html to be the main page
 const __dirname = dirname(fileURLToPath(import.meta.url));
 app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, 'index.html'));
+    res.sendFile(join(__dirname, 'public/index.html'));
 });
+
+// make everything else in public available
+app.use(express.static('public'));
 
 // listen for socket connections
 io.on('connection', (socket) => {
