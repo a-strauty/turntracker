@@ -10,7 +10,7 @@ serialInst.open()
 
 def sort_and_process(pairs, process_function):
     # Sort the list of tuples based on the second item (value)
-    sorted_pairs = sorted(pairs, key=lambda x: x[1])
+    sorted_pairs = sorted(pairs, key=lambda x: x[1], reverse=True)
     
     # Call the process function for each item in the sorted list
     for pair in sorted_pairs:
