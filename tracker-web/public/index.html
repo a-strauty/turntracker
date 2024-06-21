@@ -8,16 +8,22 @@
   </head>
   <body>
 
-    <div class="px-4 py-5 my-5 text-center">
+    <div class="px-4 py-5 text-center">
       <h1 class="display-5 fw-bold text-body-emphasis">Turn Tracker</h1>
 
       <form id="form">
-        <div class="container col-sm-6 bg-dark text-light" id="container-form">
+        <div class="mt-5 mb-2 py-4 container col-sm-6 bg-dark text-light" id="container-form">
           <!-- this gets filled by javascript -->
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
         <button class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+    </div>
+
+    <div class="px-4 py-2 text-center">
+      <div class="py-4 container col-sm-6 bg-dark text-light" id="container-results">
+
+      </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>

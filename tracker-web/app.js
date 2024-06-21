@@ -43,12 +43,16 @@ app.use('/js', express.static(join(__dirname, 'node_modules/bootstrap/dist/js'))
 
 // listen for socket connections
 io.on('connection', (socket) => {
-    // grab chat messages and output them to console
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-        port.write(msg);
+    // grab submitted form object
+    socket.on('trackerData', (msg) => {
+        const [key, value] = msg;
+        const trackerNumber = key.split("tracker_")[1];
+        const trackerData = `<asdf, ${trackerNumber}, 5>`
+        console.log(trackerData);
+        port.write(trackerData);
     });
 });
+
 
 // start the web server at port 3000
 server.listen(3000, () => {

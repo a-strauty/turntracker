@@ -4,20 +4,64 @@ function sortAndProcess(pairs) {
   const sortedPairs = pairs.sort((a, b) => b[1] - a[1]);
 
   // Store the results in an object
-  const result = {};
-  sortedPairs.forEach(pair => {
-      result[pair[0]] = pair[1];
-  });
+  // const result = {};
+  // sortedPairs.forEach(pair => {
+  //     result[pair[0]] = pair[1];
+  // });
 
-  return result;
-}
+  return sortedPairs;
+};
+
+// logic to display the sorted trackers
+function displayTrackers(pairs) {
+  // Get the container element
+  const container = document.getElementById('container-results');
+
+  // Clear the container
+  container.innerHTML = '';
+
+  // Iterate through each pair and create HTML elements
+  pairs.forEach(pair => {
+      const [key, value] = pair;
+
+      // Create a new div element
+      const div = document.createElement('div');
+      div.className = 'item-tracker';
+
+      // Create a new paragraph element for the key
+      const itemElement = document.createElement('p');
+      itemElement.textContent = `Key: ${key} | Value: ${value}`;
+
+      // Append the key and value elements to the div
+      div.appendChild(itemElement);
+
+      // Append the div to the container
+      container.appendChild(div);
+  });
+};
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+// logic to send data to trackers
+async function sendTrackers(pairs){
+  for (const pair of pairs) {
+    // Send it to the server via websocket
+    socket.emit('trackerData', pair);
+    await delay(10000);
+  };
+};
 
 // Create tracker form element
 let formElement = document.getElementById("container-form");
 for (let i =1; i <= 5; i++){
   // containers
   let main_div = document.createElement('div');
-  main_div.className = "row mb-3";
+  main_div.className = "row mb-3 text-end";
+  if (i == 5){
+    main_div.className = "row text-end";
+  }
 
   let input_div = document.createElement('div');
   input_div.className = "col-sm-3";
@@ -26,7 +70,7 @@ for (let i =1; i <= 5; i++){
   let label = document.createElement('label');
   label.innerText = "Tracker " + i;
   label.htmlFor = "tracker_" + i;
-  label.className = "col-sm-9 col-form-label";
+  label.className = "col-sm-6 col-form-label";
   // make text box
   let input = document.createElement('input');
   input.type = "text";
@@ -59,9 +103,12 @@ document.getElementById('form').addEventListener('submit', function(event) {
   const pairs = Object.entries(formObject);
 
   // Sort and process the form data
-  const result = sortAndProcess(pairs);
+  const sortedPairs = sortAndProcess(pairs);
 
-  console.log(result);
-  
-  socket.emit('form', result);
+  // show the sorted trackers
+  displayTrackers(sortedPairs);
+
+  // send the sorted trackers to serial
+  sendTrackers(sortedPairs);
+
 });
