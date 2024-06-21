@@ -37,6 +37,10 @@ app.get('/', (req, res) => {
 // make everything else in public available
 app.use(express.static('public'));
 
+// add bootstrap
+app.use('/css', express.static(join(__dirname, 'node_modules/bootstrap/dist/css')))
+app.use('/js', express.static(join(__dirname, 'node_modules/bootstrap/dist/js')))
+
 // listen for socket connections
 io.on('connection', (socket) => {
     // grab chat messages and output them to console

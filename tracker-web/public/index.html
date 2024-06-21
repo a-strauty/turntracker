@@ -4,17 +4,24 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Turn Tracker</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
   </head>
   <body>
-    <div id="ctr_form">
-        <form id="form" action="">
-            <label for="tracker_1">Tracker 1</label>
-            <input type="text" id="tracker_1" name="tracker_1">
-        </form>
+
+    <div class="px-4 py-5 my-5 text-center">
+      <h1 class="display-5 fw-bold text-body-emphasis">Turn Tracker</h1>
+
+      <form id="form">
+        <div class="container col-sm-6 bg-dark text-light" id="container-form">
+          <!-- this gets filled by javascript -->
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn btn-secondary">Reset</button>
+      </form>
     </div>
-    <button>Reset</button>
-    <button>Submit</button>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="tracker.js"></script>
+
   </body>
 </html>
