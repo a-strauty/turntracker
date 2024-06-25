@@ -2,13 +2,6 @@
 function sortAndProcess(pairs) {
   // Sort the array of tuples based on the second item (value)
   const sortedPairs = pairs.sort((a, b) => b[1] - a[1]);
-
-  // Store the results in an object
-  // const result = {};
-  // sortedPairs.forEach(pair => {
-  //     result[pair[0]] = pair[1];
-  // });
-
   return sortedPairs;
 };
 
@@ -16,25 +9,19 @@ function sortAndProcess(pairs) {
 function displayTrackers(pairs) {
   // Get the container element
   const container = document.getElementById('container-results');
-
   // Clear the container
   container.innerHTML = '';
-
   // Iterate through each pair and create HTML elements
   pairs.forEach(pair => {
       const [key, value] = pair;
-
       // Create a new div element
       const div = document.createElement('div');
-      div.className = 'item-tracker';
-
+      div.id = `item-${key}`;
       // Create a new paragraph element for the key
       const itemElement = document.createElement('p');
       itemElement.textContent = `Key: ${key} | Value: ${value}`;
-
       // Append the key and value elements to the div
       div.appendChild(itemElement);
-
       // Append the div to the container
       container.appendChild(div);
   });
@@ -47,9 +34,16 @@ function delay(ms) {
 // logic to send data to trackers
 async function sendTrackers(pairs){
   for (const pair of pairs) {
+    const [key, value] = pair;
     // Send it to the server via websocket
     socket.emit('trackerData', pair);
+
+    // highlight the div containing this item
+    let div = document.getElementById(`item-${key}`)
+    div.style.backgroundColor = 'yellow';
+
     await delay(10000);
+    div.style.backgroundColor = '';
   };
 };
 
@@ -90,7 +84,9 @@ const socket = io();
 
 document.getElementById('form').addEventListener('submit', function(event) {
   event.preventDefault();
-
+  // unhide results div
+  let results_div = document.getElementById('container-results');
+  results_div.classList.remove('d-none');
   // Create an object to hold the form data
   const formData = new FormData(event.target);
   const formObject = {};
