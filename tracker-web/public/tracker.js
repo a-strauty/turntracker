@@ -31,18 +31,23 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+let returnTracker = false;
 // logic to send data to trackers
 async function sendTrackers(pairs){
   for (const pair of pairs) {
     const [key, value] = pair;
-    // Send it to the server via websocket
+    // Send it to the server via socket.io
     socket.emit('trackerData', pair);
 
     // highlight the div containing this item
-    let div = document.getElementById(`item-${key}`)
+    let div = document.getElementById(`item-${key}`);
     div.style.backgroundColor = 'yellow';
 
-    await delay(10000);
+    while (!returnTracker) {
+        // Wait patiently until returnTracker becomes true
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    };
+    returnTracker = false;
     div.style.backgroundColor = '';
   };
 };
@@ -108,3 +113,9 @@ document.getElementById('form').addEventListener('submit', function(event) {
   sendTrackers(sortedPairs);
 
 });
+
+// alert
+socket.on('returnTracker', response => {
+    document.getElementById('alertId').classList.remove('hide');
+    returnTracker = true;
+})

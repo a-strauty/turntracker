@@ -53,6 +53,12 @@ io.on('connection', (socket) => {
     });
 });
 
+parser.on('data', data =>{
+    if (data.includes("Button")) {
+        console.log('DATA: ' + data);
+        io.emit('returnTracker', "true");
+    }
+});
 
 // start the web server at port 3000
 server.listen(3000, () => {
