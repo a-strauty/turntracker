@@ -47,14 +47,15 @@ io.on('connection', (socket) => {
     socket.on('trackerData', (msg) => {
         const [key, value] = msg;
         const trackerNumber = key.split("tracker_")[1];
-        const trackerData = `<asdf, ${trackerNumber}, 5>`
+        const trackerData = `<Browser, ${trackerNumber}, 1>`
         console.log(trackerData);
         port.write(trackerData);
     });
 });
 
 parser.on('data', data =>{
-    if (data.includes("Button")) {
+    console.log('DATA: ' + data);
+    if (data.includes("<Receiver")) {
         console.log('DATA: ' + data);
         io.emit('returnTracker', "true");
     }
