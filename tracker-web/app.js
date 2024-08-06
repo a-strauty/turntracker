@@ -11,6 +11,17 @@ import { ReadlineParser } from '@serialport/parser-readline';
 // required packages for serial send/receive
 import { Server } from 'socket.io';
 
+// function for parsing received serial data
+function parseData(input) {
+    // Extract the content between the angle brackets
+    const data = input.match(/<([^>]+)>/)[1];
+    
+    // Split the content by commas
+    const values = data.split(',');
+
+    return values;
+}
+
 // web server setup
 const app = express();
 const server = createServer(app);
@@ -56,8 +67,31 @@ io.on('connection', (socket) => {
 parser.on('data', data =>{
     console.log('DATA: ' + data);
     if (data.includes("<Receiver")) {
-        console.log('DATA: ' + data);
-        io.emit('returnTracker', "true");
+        const parsedValues = parseData(data);
+        console.log('DATA: ' + parsedValues);
+        const StatusID = parsedValues[2];
+        if(StatusID == 0){
+            console.log('RECEIVER: WAITING');
+        }
+        if(StatusID == 1){
+            console.log('RECEIVER: STARTED');
+        }
+        if(StatusID == 2){
+            console.log('RECEIVER: PAUSED');
+        }
+        if(StatusID == 3){
+            console.log('RECEIVER: RESUMED');
+        }
+        if(StatusID == 4){
+            console.log('RECEIVER: CANCELLED');
+            io.emit('returnTracker', "true");
+        }
+        if(StatusID == 5){
+            console.log('RECEIVER: RUNNING');
+        }
+        if(StatusID == 6){
+            console.log('RECEIVER: UP-NEXT');
+        }
     }
 });
 

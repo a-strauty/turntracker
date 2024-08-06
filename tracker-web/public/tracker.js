@@ -44,7 +44,7 @@ async function sendTrackers(pairs){
     div.style.backgroundColor = 'yellow';
 
     while (!returnTracker) {
-        // Wait patiently until returnTracker becomes true
+        // Wait until returnTracker becomes true
         await new Promise((resolve) => setTimeout(resolve, 100));
     };
     returnTracker = false;
@@ -118,4 +118,4 @@ document.getElementById('form').addEventListener('submit', function(event) {
 socket.on('returnTracker', response => {
     document.getElementById('alertId').classList.remove('hide');
     returnTracker = true;
-})
+});
