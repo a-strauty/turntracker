@@ -69,28 +69,40 @@ parser.on('data', data =>{
     if (data.includes("<Receiver")) {
         const parsedValues = parseData(data);
         console.log('DATA: ' + parsedValues);
-        const StatusID = parsedValues[2];
-        if(StatusID == 0){
-            console.log('RECEIVER: WAITING');
-        }
-        if(StatusID == 1){
-            console.log('RECEIVER: STARTED');
-        }
-        if(StatusID == 2){
-            console.log('RECEIVER: PAUSED');
-        }
-        if(StatusID == 3){
-            console.log('RECEIVER: RESUMED');
-        }
-        if(StatusID == 4){
-            console.log('RECEIVER: CANCELLED');
-            io.emit('returnTracker', "true");
-        }
-        if(StatusID == 5){
-            console.log('RECEIVER: RUNNING');
-        }
-        if(StatusID == 6){
-            console.log('RECEIVER: UP-NEXT');
+        const StatusID = parseInt(parsedValues[2], 10);
+
+        switch(StatusID) {
+            case 0:
+                console.log('RECEIVER: WAITING');
+                io.emit('trackerStatusID', 0);
+                break;
+            case 1:
+                console.log('RECEIVER: STARTED');
+                io.emit('trackerStatusID', 1);
+                break;
+            case 2:
+                console.log('RECEIVER: PAUSED');
+                io.emit('trackerStatusID', 2);
+                break;
+            case 3:
+                console.log('RECEIVER: RESUMED');
+                io.emit('trackerStatusID', 3);
+                break;
+            case 4:
+                console.log('RECEIVER: CANCELLED');
+                io.emit('trackerStatusID', 4);
+                break;
+            case 5:
+                console.log('RECEIVER: RUNNING');
+                io.emit('trackerStatusID', 5);
+                break;
+            case 6:
+                console.log('RECEIVER: UP-NEXT');
+                io.emit('trackerStatusID', 6);
+                break;
+            default:
+                console.log('RECEIVER: UNKNOWN STATUS');
+                break
         }
     }
 });

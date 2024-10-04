@@ -31,7 +31,9 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+let trackerStatusID = 0;
 let returnTracker = false;
+
 // logic to send data to trackers
 async function sendTrackers(pairs){
   for (const pair of pairs) {
@@ -48,7 +50,7 @@ async function sendTrackers(pairs){
         await new Promise((resolve) => setTimeout(resolve, 100));
     };
     returnTracker = false;
-    div.style.backgroundColor = '';
+    div.style.removeProperty("background-color");
   };
 };
 
@@ -115,7 +117,36 @@ document.getElementById('form').addEventListener('submit', function(event) {
 });
 
 // alert
-socket.on('returnTracker', response => {
-    document.getElementById('alertId').classList.remove('hide');
-    returnTracker = true;
+socket.on('trackerStatusID', response => {
+  // make sure trackerStatusID is an integer
+  //const trackerStatusID = parseInt(trackerStatusID, 10);
+    switch(response){
+      case 0:
+        // Waiting
+        break;
+      case 1:
+        // Started
+        break;
+      case 2:
+        // Paused
+        break;
+      case 3:
+        // Resumed
+        break;
+      case 4:
+        // Cancelled or ended
+        document.getElementById('alertId').classList.remove('hide');
+        returnTracker = true;
+        trackerStatusID = response;
+        break;
+      case 5:
+        // Running
+        break;
+      case 6:
+        // Up-next
+        break;
+      default:
+        // unknown status
+        break;
+    }
 });
